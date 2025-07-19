@@ -1,0 +1,31 @@
+%%{
+  init: {
+    'themeVariables': {
+      'noteBkgColor': 'rgba(173, 216, 230, 0.7)',
+      'noteBorderColor': 'rgba(173, 216, 230, 0.7)',
+      'noteTextColor': '#000000'
+    }
+  }
+}%%
+
+sequenceDiagram
+    title TCP Three-Way Handshake (Connection Establishment)
+
+    actor Client as Client PC
+    participant Server as TCP Server
+
+    %% 1. SYN
+    Client->>Server: SYN (Synchronize) [SEQ=x]
+    activate Server
+    Note left of Client: I want to connect. <br/>My initial sequence number is x.
+
+    %% 2. SYN-ACK
+    Server-->>Client: SYN-ACK (Synchronize-Acknowledge) [SEQ=y, ACK=x+1]
+    deactivate Server
+    Note right of Server: I agree to connect.<br/> My sequence number is y,<br/> and I acknowledge your sequence x+1.
+
+    %% 3. ACK
+    Client->>Server: ACK (Acknowledge) [SEQ=x+1, ACK=y+1]
+    Note left of Client: I acknowledge your sequence y+1.<br/> The connection is established.
+
+   

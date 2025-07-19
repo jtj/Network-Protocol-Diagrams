@@ -9,33 +9,32 @@
 }%%
 
 sequenceDiagram
-    title Simplified DHCP IP Assignment (DORA Process)
+    title The DORA (Discover, Offer, Request, Acknowledge) Process
     
     actor Client as Client PC
     participant DHCPServer as DHCP Server
 
-    Note over Client,DHCPServer: The DORA (Discover, Offer, Request, Acknowledge) Process
-
+   
     %% 1. Discover
     activate Client
     Client->>DHCPServer: DHCPDISCOVER (Broadcast)
     activate DHCPServer
-    Note right of Client: I need an IP address!
+    Note left of Client: I need an IP address!
 
     %% 2. Offer
     DHCPServer->>DHCPServer: Finds an available IP address
     DHCPServer-->>Client: DHCPOFFER (Unicast)
-    Note left of DHCPServer: Here's an IP you can use: 192.168.1.50
+    Note right of DHCPServer: Here's an IP you can use: 192.168.1.50
 
     %% 3. Request
     Client-->>DHCPServer: DHCPREQUEST (Broadcast)
-    Note right of Client: I'll take that IP address (192.168.1.50)!
+    Note left of Client: I'll take that IP address (192.168.1.50)!
 
     %% 4. Acknowledge
     DHCPServer->>DHCPServer: Commits lease to database
     DHCPServer-->>Client: DHCPACK (Unicast)
     deactivate DHCPServer
     deactivate Client
-    Note left of DHCPServer: It's official. The IP is yours.
+    Note right of DHCPServer: It's official. The IP is yours.
     
-    Note over Client: Client configures its network interface with the assigned IP.
+    
