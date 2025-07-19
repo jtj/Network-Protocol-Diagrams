@@ -1,0 +1,37 @@
+%%{
+  init: {
+    'themeVariables': {
+      'noteBkgColor': 'rgba(173, 216, 230, 0.7)',
+      'noteBorderColor': 'rgba(173, 216, 230, 0.7)',
+      'noteTextColor': '#000000'
+    }
+  }
+}%%
+
+sequenceDiagram
+    title UDP Protocol (Datagram Transmission)
+
+    actor Sender as UDP Sender
+    participant Network as Network
+    participant Receiver as UDP Receiver
+
+    Note left of Sender: UDP is a connectionless protocol. <br />No handshake or session setup.
+
+    %% 1. Sender prepares datagram
+    Sender->>Sender: Prepare UDP datagram (data, port)
+
+    %% 2. Send datagram
+    Sender->>Network: Send UDP datagram (data, port)
+    activate Network
+    Note left of Sender: Datagram is sent without prior connection.
+
+    %% 3. Network forwards datagram
+    Network->>Receiver: Deliver UDP datagram
+    deactivate Network
+    Note right of Receiver: Receiver gets the datagram. <br>No guarantee of delivery, order, or integrity.<br/> But it got there fast!
+
+    %% 4. (Optional) Application processes data
+    Receiver->>Receiver: Process received data
+    
+
+    Note left of Sender: No retransmission, <br/>no acknowledgment,<br/> no connection teardown.
