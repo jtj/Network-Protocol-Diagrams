@@ -1,0 +1,59 @@
+%%{
+  init: {
+    'themeVariables': {
+      'noteBkgColor': 'rgba(173, 216, 230, 0.7)',
+      'noteBorderColor': 'rgba(173, 216, 230, 0.7)',
+      'noteTextColor': '#000000'
+    }
+  }
+}%%
+
+sequenceDiagram
+    title DHCP IP Address Assignment (DORA Process)
+    
+    actor Client as Client PC
+    participant Switch as Network Switch
+    participant DHCPServer as DHCP Server
+
+    Note over Client,DHCPServer: The DORA (Discover, Offer, Request, Acknowledge) Process
+
+    %% 1. Discover
+    Client->>Switch: DHCPDISCOVER (Broadcast)
+    activate Switch
+    Note right of Client: I need an IP address!
+    Switch->>DHCPServer: Forwards DHCPDISCOVER
+    deactivate Switch
+    activate DHCPServer
+
+    %% 2. Offer
+    DHCPServer->>DHCPServer: Finds an available IP address
+    DHCPServer->>Switch: DHCPOFFER (Unicast to Client's MAC)
+    deactivate DHCPServer
+    activate Switch
+    Note left of DHCPServer: Here's an IP you can use: 192.168.1.50
+    
+    Switch->>Client: Forwards DHCPOFFER
+    deactivate Switch
+    activate Client
+
+    %% 3. Request
+    Client->>Switch: DHCPREQUEST (Broadcast)
+    deactivate Client
+    activate Switch
+    Note right of Client: I'll take that IP address (192.168.1.50)!
+    
+    Switch->>DHCPServer: Forwards DHCPREQUEST
+    deactivate Switch
+    activate DHCPServer
+
+    %% 4. Acknowledge
+    DHCPServer->>DHCPServer: Commits lease to database
+    DHCPServer->>Switch: DHCPACK (Unicast to Client's MAC)
+    deactivate DHCPServer
+    activate Switch
+    Note left of DHCPServer: It's official. The IP is yours.
+    
+    Switch->>Client: Forwards DHCPACK
+    deactivate Switch
+    
+    Note over Client: Client configures its network interface with the assigned IP.

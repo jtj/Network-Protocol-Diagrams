@@ -1,0 +1,69 @@
+%%{
+  init: {
+    'themeVariables': {
+      'noteBkgColor': 'rgba(173, 216, 230, 0.7)',
+      'noteBorderColor': 'rgba(173, 216, 230, 0.7)',
+      'noteTextColor': '#000000'
+    }
+  }
+}%%
+
+sequenceDiagram
+    title DHCP IP Lease Sequence & Renewal Failure
+    actor Client as Client PC
+    participant Switch as Network Switch
+    participant DHCP1 as DHCP Server 1
+    participant DHCP2 as DHCP Server 2
+
+    %% --- DHCP Discover Process ---
+    Client->>Switch: DHCPDISCOVER (Broadcast)
+    activate Switch
+    
+  %% The switch forwards the broadcast to both servers
+    
+    Switch->>DHCP1: Forwards DHCPDISCOVER
+    Switch->>DHCP2: Forwards DHCPDISCOVER
+    deactivate Switch
+
+    %% Both servers process the request in parallel
+    par DHCP1 finds an available IP
+        activate DHCP1
+        DHCP1->>DHCP1: Checks IP address pool
+    and DHCP2 does not respond
+        activate DHCP2
+        Note over DHCP2: Request times out
+        deactivate DHCP2
+    end
+
+    %% --- DHCP Offer Process ---
+    DHCP1->>Switch: DHCPOFFER (IP: 192.168.1.100)
+    deactivate DHCP1
+    activate Switch
+
+    Switch->>Client: Forwards DHCPOFFER
+    deactivate Switch
+
+    %% --- Time passes and DHCP Server 1 goes down ---
+    Note over Client,DHCP1: Client waits 30 minutes, DHCP Server 1 goes offline
+
+    %% --- Lease Renewal Process (Failover) ---
+
+    Client->> DHCP1: DHCPREQUEST (Unicast) (no response)
+
+    %% After no response, the client broadcasts a new request
+    Client->>Switch: DHCPREQUEST (Broadcast)
+    activate Switch
+
+    %% The switch forwards the broadcast to the remaining active server
+    Switch->>DHCP2: Forwards DHCPREQUEST
+    deactivate Switch
+    activate DHCP2
+
+    %% DHCP Server 2 acknowledges the request
+    DHCP2->>Switch: DHCPACK (IP: 192.168.1.100)
+    deactivate DHCP2
+    activate Switch
+
+    %% The switch forwards the acknowledgement to the client
+    Switch->>Client: Forwards DHCPACK
+    deactivate Switch
