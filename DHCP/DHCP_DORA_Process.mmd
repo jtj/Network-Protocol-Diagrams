@@ -46,6 +46,9 @@ sequenceDiagram
     deactivate Switch
     activate DHCPServer
 
+   
+
+
     %% 4. Acknowledge
     DHCPServer->>DHCPServer: Commits lease to database
     DHCPServer->>Switch: DHCPACK (Unicast to Client's MAC)
