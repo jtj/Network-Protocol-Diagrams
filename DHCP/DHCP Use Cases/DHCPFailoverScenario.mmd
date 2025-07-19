@@ -1,0 +1,35 @@
+graph TD
+    %% Define style classes for different device types
+    classDef server fill:#add8e660,stroke:#333,stroke-width:2px
+    classDef switch fill:#00ffcc20,stroke:#333,stroke-width:2px
+    classDef client fill:#6600cc20,stroke:#333,stroke-width:2px
+
+    %% --- Server Subgraph ---
+    subgraph DHCP Servers
+        DHCP1["fa:fa-server DHCP Server 1"]
+        DHCP2["fa:fa-server DHCP Server 2"]
+    end
+
+    %% --- Network Switch ---
+    SW1["fa:fa-exchange-alt Switch"]
+
+    %% --- Client Subgraph ---
+    subgraph "Client Computers"
+        Client1["fa:fa-laptop Client 1"]
+        Client2["fa:fa-laptop Client 2"]
+        Client3["fa:fa-desktop Client 3"]
+        Client4["fa:fa-desktop Client 4"]
+    end
+
+    %% --- Define Connections ---
+    DHCP1 --- SW1
+    DHCP2 --- SW1
+    SW1 --- Client1
+    SW1 --- Client2
+    SW1 --- Client3
+    SW1 --- Client4
+
+    %% --- Apply Styles ---
+    class DHCP1,DHCP2 server
+    class SW1 switch
+    class Client1,Client2,Client3,Client4 client
