@@ -1,0 +1,35 @@
+%%{
+  init: {
+    'themeVariables': {
+      'noteBkgColor': 'rgba(173, 216, 230, 0.7)',
+      'noteBorderColor': 'rgba(173, 216, 230, 0.7)',
+      'noteTextColor': '#000000'
+    }
+  }
+}%%
+
+sequenceDiagram
+    title Internet Key Exchange (IKE) Main Mode Sequence
+
+    actor Initiator as VPN Client
+    participant Responder as VPN Gateway
+
+    Note over Initiator,Responder: IKE establishes a secure, authenticated channel for IPsec.
+
+    %% 1. SA Negotiation
+    Initiator->>Responder: IKE_SA_INIT (Propose cryptographic algorithms)
+    Responder-->>Initiator: IKE_SA_INIT (Accept proposal, send DH public value)
+    Note right of Initiator: Both sides agree on encryption and hash algorithms.
+
+    %% 2. Diffie-Hellman Key Exchange
+    Initiator->>Responder: DH public value
+    Responder-->>Initiator: DH public value
+    Note left of Responder: Both sides compute shared secret.
+
+    %% 3. Authentication
+    Initiator->>Responder: IKE_AUTH (Send identity, authentication)
+    Responder-->>Initiator: IKE_AUTH (Send identity, authentication)
+    Note right of Initiator: Each side proves its identity (certificates, pre-shared key, etc).
+
+    %% 4. Secure Channel Established
+    Note over Initiator,Responder: Secure IKE SA is established. IPsec tunnel can be created.

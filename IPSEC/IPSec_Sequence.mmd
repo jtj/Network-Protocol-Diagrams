@@ -1,0 +1,38 @@
+%%{
+  init: {
+    'themeVariables': {
+      'noteBkgColor': 'rgba(173, 216, 230, 0.7)',
+      'noteBorderColor': 'rgba(173, 216, 230, 0.7)',
+      'noteTextColor': '#000000'
+    }
+  }
+}%%
+
+sequenceDiagram
+    title IPsec Tunnel Establishment Sequence
+
+    actor HostA as Host A
+    participant HostB as Host B
+    participant Network as Internet
+
+    Note over HostA,HostB: IPsec provides secure communication over IP networks.
+
+    %% 1. IKE Phase 1 (see IKE_Sequence.mmd for details)
+    HostA->>HostB: Negotiate IKE (establish secure channel)
+    Note right of HostA: IKE authenticates and sets up keys for IPsec.
+
+    %% 2. IPsec SA Establishment
+    HostA->>HostB: Propose IPsec Security Association (SA)
+    HostB-->>HostA: Accept SA, exchange keys
+    Note left of HostB: Both hosts agree on encryption, integrity, and keys.
+
+    %% 3. Data Transfer
+    HostA->>Network: Send encrypted IPsec packet
+    Network->>HostB: Deliver encrypted packet
+    HostB->>HostB: Decrypt and process packet
+    Note right of HostB: Data is protected in transit.
+
+    %% 4. Tunnel Teardown
+    HostA->>HostB: Delete SA (tunnel close)
+    HostB-->>HostA: Acknowledge tunnel close
+    Note over HostA,HostB: IPsec tunnel is closed and keys are deleted.
