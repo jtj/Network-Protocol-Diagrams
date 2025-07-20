@@ -9,6 +9,7 @@ graph TD
     %% --- Server Subgraph ---
     subgraph DHCP Servers
         DHCP1["fa:fa-server DHCP Server 1"]
+        
         DHCP2["fa:fa-server DHCP Server 2"]
     end
 
@@ -30,8 +31,18 @@ graph TD
     SW1 --- Client2
     SW1 --- Client3
     SW1 --- Client4
+    Client2 ~~~ NoteBottom
+
+  
 
     %% --- Apply Styles ---
     class DHCP1,DHCP2 server
     class SW1 switch
     class Client1,Client2,Client3,Client4 client
+
+    %% --- Diagram Note ---
+    %% This is a workaround for notes in flowcharts. You can use a dummy node and style it as a note.
+    NoteBottom["<br/>**DHCP Server 1** leases IPs from the range **192.168.0.1 to 192.168.0.254** <br/><br/>**DHCP Server 2** leases IPs from the range **192.168.1.1 to 192.168.1.254** <br/> <span style="opacity:0">..................................................................................</span> "]
+    NoteBottom:::note
+   
+    classDef note fill:#fffacd,stroke:#333,stroke-width:1px,color:#333,font-size:16px
