@@ -1,0 +1,29 @@
+---
+config:
+  theme: 'default'
+
+title: Multicast
+---
+
+
+flowchart TD
+    Switch((Switch))
+
+    subgraph Broadcast_Clients["Clients"]
+        Client1((Client 1))
+        Client2((Client 2))
+        Client3((Client 3))
+        Client4((Client 4))
+        Client5((Client 5))
+        Client6((Client 6))
+    end
+
+    Switch --> Client1
+    Switch --> Client5
+    Switch --> Client3
+    Switch --> Client6
+
+
+
+
+
